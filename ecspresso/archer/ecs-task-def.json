@@ -1,0 +1,148 @@
+{
+  "containerDefinitions": [
+    {
+      "cpu": 1024,
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+        },
+        {
+          "name": "PORT",
+          "value": "80"
+        },
+        {
+          "name": "SENTRY_RELEASE",
+          "value": "{{ env `SENTRY_RELEASE` `` }}"
+        },
+        {
+          "name": "APP_NAME",
+          "value": "archers90-archer"
+        },
+        {
+          "name": "EMAIL_FROM",
+          "value": "archers90@archers.at"
+        },
+        {
+          "name": "NEXTAUTH_URL",
+          "value": "archer-dev.90.archers.at"
+        },
+        {
+          "name": "NEXT_PUBLIC_CHANNEL_TALK_PLUGIN_KEY",
+          "value": "2b76719a-3b98-433a-9c85-6c23174604c5"
+        },
+        {
+          "name": "USER_UPLOADS_BUCKET",
+          "value": "archers90-uploads"
+        },
+        {
+          "name": "USER_DOCUMENTS_BUCKET",
+          "value": "archers90-documents"
+        },
+        {
+          "name": "SENTRY_DSN",
+          "value": "https://1da69d26a20b4e4bba5e193af75d5ef7@o515164.ingest.sentry.io/4505347607494656"
+        },
+        {
+          "name": "MEMBER_APP_HOST",
+          "value": "https://member.90.archers.at"
+        },
+        {
+          "name": "ARCHERS_APP_USER_IMAGE_UPLOADS_BUCKET",
+          "value": "archers-bucket-for-avatar-prd"
+        },
+        {
+          "name": "ARCHER_APP_HOST",
+          "value": "archer-dev.90.archers.at"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "NEXTAUTH_SECRET",
+          "valueFrom": "/Archers90/NextAuthSecret/prd"
+        },
+        {
+          "name": "SESSION_SECRET_KEY",
+          "valueFrom": "/Archers90/NextAuthSecret/prd"
+        },
+        {
+          "name": "DATABASE_URL",
+          "valueFrom": "/Archers90/DatabaseURL/prd"
+        },
+        {
+          "name": "SENDGRID_API_KEY",
+          "valueFrom": "/Archers90/SendgridAPIKey/prd"
+        },
+        {
+          "name": "TYPEFORM_WEBHOOK_SECRET",
+          "valueFrom": "/Archers90/TypeformWebhookSecret/prd"
+        },
+        {
+          "name": "CHANNEL_TALK_API_KEY",
+          "valueFrom": "/Archers90/ChannelTalkApiKey/prd"
+        },
+        {
+          "name": "CHANNEL_TALK_API_SECRET",
+          "valueFrom": "/Archers90/ChannelTalkApiSecret/prd"
+        },
+        {
+          "name": "CHANNEL_TALK_WEBHOOK_TOKEN",
+          "valueFrom": "/Archers90/ChannelTalkWebhookToken/prd"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "secretOptions": [],
+        "options": {
+          "awslogs-group": "/archers90-archer-production/archers90-archer",
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "app"
+        }
+      },
+      "essential": true,
+      "image": "{{ must_env `IMAGE_URL` }}",
+      "command": [
+        "/bin/bash",
+        "-c",
+        "yarn prisma migrate deploy && yarn start"
+      ],
+      "linuxParameters": {
+        "initProcessEnabled": true
+      },
+      "memory": 2048,
+      "mountPoints": [],
+      "name": "app",
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "hostPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "ulimits": [
+        {
+          "hardLimit": 65536,
+          "name": "nofile",
+          "softLimit": 65536
+        }
+      ],
+      "volumesFrom": [],
+      "healthCheck": {
+        "command": ["CMD-SHELL", "curl -IsSf localhost:80 || exit 1"],
+        "interval": 30,
+        "retries": 3,
+        "startPeriod": 10,
+        "timeout": 5
+      }
+    }
+  ],
+  "cpu": "1024",
+  "executionRoleArn": "arn:aws:iam::640869257465:role/archers90-archer-production-executor",
+  "family": "archers90-archer-production",
+  "memory": "2048",
+  "networkMode": "awsvpc",
+  "placementConstraints": [],
+  "requiresCompatibilities": ["FARGATE"],
+  "taskRoleArn": "arn:aws:iam::640869257465:role/archers90-archer-production-task",
+  "volumes": []
+}

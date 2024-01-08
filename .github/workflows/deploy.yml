@@ -1,0 +1,38 @@
+name: "Deploy App"
+
+on:
+  push:
+    paths-ignore:
+      - "**/*.md"
+    branches:
+      - master
+  release:
+    types: [published]
+
+jobs:
+  deploy_ecs:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ecspresso
+    steps:
+      - uses: actions/checkout@v3
+      - uses: kayac/ecspresso@v2
+        with:
+          version: v2.0.0 # or latest
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          role-duration-seconds: 1200
+          role-session-name: GithubDeployECS
+      - name: deploy to production
+        env:
+          AWS_REGION: ${{ vars.AWS_REGION }}
+          NEXT_PUBLIC_CHANNEL_TALK_PLUGIN_KEY: ${{ secrets.NEXT_PUBLIC_CHANNEL_TALK_PLUGIN_KEY }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        run: yarn && yarn deploy --app member --env development

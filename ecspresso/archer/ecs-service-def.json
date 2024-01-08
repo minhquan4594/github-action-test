@@ -1,0 +1,47 @@
+{
+  "capacityProviderStrategy": [
+    {
+      "base": 1,
+      "capacityProvider": "FARGATE_SPOT",
+      "weight": 4
+    },
+    {
+      "base": 0,
+      "capacityProvider": "FARGATE",
+      "weight": 1
+    }
+  ],
+  "deploymentConfiguration": {
+    "deploymentCircuitBreaker": {
+      "enable": true,
+      "rollback": true
+    },
+    "maximumPercent": 200,
+    "minimumHealthyPercent": 100
+  },
+  "desiredCount": 1,
+  "enableECSManagedTags": false,
+  "enableExecuteCommand": true,
+  "healthCheckGracePeriodSeconds": 0,
+  "loadBalancers": [
+    {
+      "containerName": "app",
+      "containerPort": 80,
+      "targetGroupArn": "arn:aws:elasticloadbalancing:ap-northeast-1:640869257465:targetgroup/archers90-archer-production/4fc3e06ce653e2ec"
+    }
+  ],
+  "networkConfiguration": {
+    "awsvpcConfiguration": {
+      "assignPublicIp": "ENABLED",
+      "securityGroups": ["sg-0ac8b098d9216c266"],
+      "subnets": [
+        "subnet-080840b957d16e935", "subnet-0af7ed090360d28f1", "subnet-0f0463c8d49f311b5"
+      ]
+    }
+  },
+  "placementConstraints": [],
+  "placementStrategy": [],
+  "platformVersion": "LATEST",
+  "schedulingStrategy": "REPLICA",
+  "serviceRegistries": []
+}

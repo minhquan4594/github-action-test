@@ -1,0 +1,8 @@
+{
+  "containerOverrides": [
+    {
+      "name": "app",
+      "command": ["yarn", "prisma", "migrate", "deploy"]
+    }
+  ]
+}
