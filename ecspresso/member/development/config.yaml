@@ -1,5 +1,5 @@
 region: ap-northeast-1
-cluster: archers90-production
+cluster: archers90-development
 service: archers90-member
 service_definition: ecs-service-def.json
 task_definition: ecs-task-def.json
