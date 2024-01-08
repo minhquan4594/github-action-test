@@ -30,7 +30,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           role-duration-seconds: 1200
           role-session-name: GithubDeployECS
-      - name: deploy to production
+      - name: deploy to development
         env:
           AWS_REGION: ${{ vars.AWS_REGION }}
           NEXT_PUBLIC_CHANNEL_TALK_PLUGIN_KEY: ${{ secrets.NEXT_PUBLIC_CHANNEL_TALK_PLUGIN_KEY }}
